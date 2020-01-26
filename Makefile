@@ -6,52 +6,66 @@
 #    By: yberries <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/20 13:27:22 by yberries          #+#    #+#              #
-#    Updated: 2020/01/25 17:03:49 by yberries         ###   ########.fr        #
+#    Updated: 2020/01/26 23:16:26 by yberries         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fdf
 
-SRC = $(addsuffix .c, \)
+LIBFT = $(LIBFT_DIR)libft.a
+LIBFT_DIR = ./libft/
+LIBFT_HEADERS = $(LIBFT_DIR)include/
 
-OBJ = $(SRC:.c=.o)
+MINILIBX = $(MINILIBX_DIR)libmlx.a
+MINILIBX_DIR = ./minilibx_macos/
+MINILIBX_HEADERS = $(MINILIBX_DIR)
 
-HDR = include/
+HEADERS_LIST = fdf.h
+HEADERS_DIR = ./include/
+HEADERS = $(addprefix $(HEADERS_DIR), $(HEADERS_LIST))
 
-SRCDIR = src/
+INCLUDES = -I$(HEADERS_DIR) -I$(LIBFT_HEADERS) -I$(MINILIBX_HEADERS)
 
-OBJDIR = obj/
+SOURCES_DIR = ./src/
+SOURCES_LIST = main.c
+SOURCES = $(addprefix $(SOURCES_DIR), $(SOURCES_LIST))
 
-SRCS = $(addprefix $(SRCDIR), $(SRC))
+OBJECTS_DIR = objects/
+OBJECTS_LIST = $(patsubst %.c, %.o, $(SOURCES_LIST))
+OBJECTS	= $(addprefix $(OBJECTS_DIR), $(OBJECTS_LIST))
 
-OBJS = $(addprefix $(OBJDIR), $(OBJ))
-
-LIB = libft/libft.a
-
+LIBRARIES = -lmlx -lm -lft -L$(LIBFT_DIR) -L$(MINILIBX_DIR) -framework OpenGL -framework AppKit
 FLAGS = -Wall -Werror -Wextra
 
-.PHONY: clean fclean re all
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
-$(LIB):
-	@cd libft; make
+$(NAME): $(LIBFT) $(MINILIBX) $(OBJECTS_DIR) $(OBJECTS)
+	gcc $(FLAGS) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
 
-$(OBJS): $(SRCS)
-	gcc $(FLAGS) -c $(SRCS) -I $(HDR)
-	mkdir -p $(OBJDIR)
-	@mv $(OBJ) $(OBJDIR)
+$(OBJECTS_DIR):
+	mkdir -p $(OBJECTS_DIR)
 
-$(NAME): Makefile $(LIB) $(OBJS)
-	gcc $(FLAGS) $(OBJS) $(LIB) -I $(HDR) -o $(NAME)
+$(OBJECTS_DIR)%.o : $(SOURCES_DIR)%.c $(HEADERS)
+	gcc $(FLAGS) -c $(INCLUDES) $< -o $@
+
+$(LIBFT):
+	$(MAKE) -sC $(LIBFT_DIR)
+
+$(MINILIBX):
+	$(MAKE) -sC $(MINILIBX_DIR)
 
 clean:
-	cd libft; make clean
-	rm -rf $(OBJDIR)
+	$(MAKE) -sC $(LIBFT_DIR) clean
+	$(MAKE) -sC $(MINILIBX_DIR) clean
+	rm -rf $(OBJECTS_DIR)
 
-fclean:
-	cd libft; make fclean
-	rm -rf $(OBJDIR)
+fclean: clean
+	rm -f $(MINILIBX)
+	rm -f $(LIBFT)
 	rm -f $(NAME)
 
-re: fclean all
+re:
+	@$(MAKE) fclean
+	@$(MAKE) all
