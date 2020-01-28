@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:40:07 by yberries          #+#    #+#             */
-/*   Updated: 2020/01/27 04:47:42 by yberries         ###   ########.fr       */
+/*   Updated: 2020/01/28 06:27:27 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define COLORZ 0xBFFCFF
 # define MAX(a, b) (a > b ? a : b)
 # define MOD(a) ((a < 0) ? -a : a)
+# define ESC	53
 
 typedef struct	s_fdf
 {
