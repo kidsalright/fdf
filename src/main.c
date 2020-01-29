@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:50:38 by yberries          #+#    #+#             */
-/*   Updated: 2020/01/27 05:13:35 by yberries         ###   ########.fr       */
+/*   Updated: 2020/01/29 03:50:06 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,24 @@
 
 int		main(int argc, char **argv)
 {
-	t_fdf *data;
-	(void)argc;
+	t_fdf		*fdf;
+	int			bits_per_pixel;
+	int			size_line;
+	int			endian;
 
-	data = (t_fdf *)malloc(sizeof(t_fdf));
-	read_file(argv[1], data);
-	data->mlx_ptr = mlx_init();
-	data->win_ptr = mlx_new_window(data->mlx_ptr, 880, 800, "FDF");
-	data->zoom = 40;
-	draw(data);
-	//mlx_key_hook(data->win_ptr, deal_key, NULL);
-	mlx_loop(data->mlx_ptr);
-
-
+	if (argc != 2)
+		exit(1);
+	fdf = (t_fdf *)malloc(sizeof(t_fdf));
+	read_file(argv[1], fdf);
+	fdf->mlx_ptr = mlx_init();
+	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, 1500, 1400, "fdf");
+	fdf->img_ptr = mlx_new_image(fdf->mlx_ptr, 500, 400);
+	fdf->img = mlx_get_data_addr(fdf->img_ptr, &bits_per_pixel, &size_line, &endian);
+	fdf->zoom = 40;
+	fdf->xshift = 450;
+	fdf->yshift = 350;
+	draw(fdf);
+	mlx_hook(fdf->win_ptr, 2, 0, key_press, fdf);
+	mlx_loop(fdf->mlx_ptr);
 	return (0);
 }

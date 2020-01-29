@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 03:52:26 by yberries          #+#    #+#             */
-/*   Updated: 2020/01/27 04:55:39 by yberries         ###   ########.fr       */
+/*   Updated: 2020/01/29 03:48:34 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,13 @@ void	draw(t_fdf *data)
 	}
 }
 
-void	isometric(float *x, float *y, int z)
+void	isometric(float *x, float *y, int z, t_fdf fdf)
 {
-	*x = (*x - *y) * cos(1.3);
-	*y = (*x + *y) * sin(1.3) - z;
+	float rot;
+
+	rot = 1 + fdf.rotate;
+	*x = (*x - *y) * cos(rot);
+	*y = (*x + *y) * sin(rot) - z;
 }
 
 void	bresenham(float x, float y, float x1, float y1, t_fdf *data)
@@ -44,24 +47,30 @@ void	bresenham(float x, float y, float x1, float y1, t_fdf *data)
 	float	x_step;
 	float	y_step;
 	int		max;
-	int		z;
-	int		z1;
+	float		z;
+	float		z1;
 
-	z = data->matrix[(int)y][(int)x];
-	z1 = data->matrix[(int)y1][(int)x1];
+	if (data->height != 0)
+		z = data->matrix[(int)y][(int)x];
+	else
+		z = data->matrix[(int)y][(int)x] * data->height + 10;
+	if (data->height != 0)
+		z1 = data->matrix[(int)y1][(int)x1] * data->height;
+	else
+		z1 = data->matrix[(int)y1][(int)x1];
 
 	x *= data->zoom;
 	y *= data->zoom;
 	x1 *= data->zoom;
 	y1 *= data->zoom;
-	
-	data->color = (z || z1) ? COLORZ : COLOR;
-	isometric(&x, &y, z);
-	isometric(&x1, &y1, z1);
-	x += 150;
-	y += 150;
-	x1 += 150;
-	y1 += 150;
+
+	data->color = (z || z1) ? (COLORZ + data->colors) : (COLOR + data->colors);
+	isometric(&x, &y, z, *data);
+	isometric(&x1, &y1, z1, *data);
+	x += data->xshift;
+	y += data->yshift;
+	x1 += data->xshift;
+	y1 += data->yshift;
 	x_step = x1 - x;
 	y_step = y1 - y;
 
