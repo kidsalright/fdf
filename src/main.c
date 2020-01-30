@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:50:38 by yberries          #+#    #+#             */
-/*   Updated: 2020/01/29 03:50:06 by yberries         ###   ########.fr       */
+/*   Updated: 2020/01/30 05:25:03 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,19 @@
 int		main(int argc, char **argv)
 {
 	t_fdf		*fdf;
-	int			bits_per_pixel;
-	int			size_line;
-	int			endian;
+	int			fd;
 
 	if (argc != 2)
+	{
+		ft_putendl("usage: ./fdf [file.fdf]");
 		exit(1);
+	}
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+	{
+		ft_putendl("Read error.");
+		exit(1);
+	}
 	fdf = (t_fdf *)malloc(sizeof(t_fdf));
 	read_file(argv[1], fdf);
 	fdf->mlx_ptr = mlx_init();
