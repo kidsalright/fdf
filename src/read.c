@@ -6,99 +6,60 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 02:48:37 by yberries          #+#    #+#             */
-/*   Updated: 2020/01/29 01:53:57 by yberries         ###   ########.fr       */
+/*   Updated: 2020/01/31 05:36:17 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int		counter(char *str, char c)
+void	matrix(int fd, t_fdf *data)
 {
-	int	i;
-	int	count;
-
-	count = 0;
-	i = 0;
-	while (str[i])
-	{
-		while (str[i] && str[i] == c)
-			++i;
-		if (str[i])
-			++count;
-		while (str[i] && str[i] != c)
-			++i;
-	}
-	return (count);
-}
-
-int		get_y(char *file)
-{
-	int		fd;
 	char	*line;
-	int		y;
-
-	fd = open(file, O_RDONLY);
-	y = 0;
-	while (get_next_line(fd, &line))
-	{
-		++y;
-		free(line);
-	}
-	close(fd);
-	return (y);
-}
-
-int		get_x(char *file)
-{
-	int		x;
-	int		fd;
-	char	*line;
-
-	fd = open(file, O_RDONLY);
-	get_next_line(fd, &line);
-	x = counter(line, ' ');
-	free(line);
-	close(fd);
-	return(x);
-}
-
-void	fill_matrix(int	*z_line, char *line)
-{
+	int		i;
 	char	**nums;
-	int		i;
+	int		j;
 
-	nums = ft_strsplit(line, ' ');
 	i = 0;
-	while (nums[i])
-	{
-		z_line[i] = ft_atoi(nums[i]);
-		free(nums[i]);
-		++i;
-	}
-	free(nums);
-	
-}
-
-void	read_file(char *file, t_fdf *data)
-{
-	int		fd;
-	char	*line;
-	int		i;
-
-	data->x = get_x(file);
-	data->y = get_y(file);
-	data->matrix = (int **)malloc(sizeof(int*) * (data->y + 1));
-	i = 0;
-	while (i <= data->y)
-		data->matrix[i++] = (int *)malloc(sizeof(int) * (data->x + 1));
-	fd = open(file, O_RDONLY);
-	i = 0;
+	data->matrix = (int **)malloc(sizeof(int*) * (data->height + 1));
 	while (get_next_line(fd, &line))
 	{
-		fill_matrix(data->matrix[i], line);
+		data->matrix[i] = (int *)malloc(sizeof(int) * (data->width + 1));
+		nums = ft_strsplit(line, ' ');
+		j = 0;
+		while (nums[j])
+		{
+			data->matrix[i][j] = ft_atoi(nums[j]);
+			free(nums[j]);
+			++j;
+		}
+		free(nums);
 		free(line);
 		++i;
 	}
 	close(fd);
 	data->matrix[i] = NULL;
+}
+
+void	read_file(char *file, t_fdf *data)
+{
+	char	*line;
+	int		width;
+	int		fd;
+
+	if (!((fd = open(file, O_RDONLY)) >= 0))
+		ft_error(1);
+	data->height = 0;
+	data->width = 0;
+	while (get_next_line(fd, &line))
+	{
+		width = ft_countwords(line, ' ');
+		if (data->width != 0 && data->width != width)
+			ft_error(2);
+		data->width = width;
+		data->height++;
+	}
+	free(line);
+	close(fd);
+	fd = open(file, O_RDONLY);
+	matrix(fd, data);
 }

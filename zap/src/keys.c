@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 01:12:32 by yberries          #+#    #+#             */
-/*   Updated: 2020/01/31 05:35:58 by yberries         ###   ########.fr       */
+/*   Updated: 2020/01/29 03:56:23 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,19 @@ int		key_press(int keycode, t_fdf *fdf)
 {
 	if (keycode == 53)
 		esc_press(fdf);
-}
-	/*
-//	if (keycode == 12)
-//	{
-//		if (fdf->zoom < 150)
-//			fdf->zoom++;
+	if (keycode == 12)
+	{
+		if (fdf->zoom < 150)
+			fdf->zoom++;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 	if (keycode == 13)
 	{
-//		if (fdf->zoom > 5)
-//			fdf->zoom--;
+		if (fdf->zoom > 5)
+			fdf->zoom--;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 	int i = 0;
 	int j = 0;
@@ -45,51 +43,50 @@ int		key_press(int keycode, t_fdf *fdf)
 	{
 		fdf->height += 2.1;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 	if (keycode == 15)
 	{
-//		fdf->colors += 1000;
+		fdf->colors += 1000;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 	if (keycode == 17)
 	{
-//		fdf->rotate += 0.2;
+		fdf->rotate += 0.2;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 	if (keycode == 49)
 	{
-//		fdf->zoom = 20;
-//		fdf->height = 0;
-//		fdf->colors = 0;
+		fdf->zoom = 20;
+		fdf->height = 0;
+		fdf->colors = 0;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 	if (keycode == 123)
 	{
-//		fdf->xshift -= 20;
+		fdf->xshift -= 20;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 	if (keycode == 124)
 	{
-//		fdf->xshift += 20;
+		fdf->xshift += 20;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 	if (keycode == 126)
 	{
-//		fdf->yshift -= 20;
+		fdf->yshift -= 20;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 	if (keycode == 125)
 	{
-//		fdf->yshift += 20;
+		fdf->yshift += 20;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
+		draw(fdf);
 	}
 }
-*/

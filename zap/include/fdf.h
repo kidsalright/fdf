@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:40:07 by yberries          #+#    #+#             */
-/*   Updated: 2020/01/31 05:36:27 by yberries         ###   ########.fr       */
+/*   Updated: 2020/01/29 03:48:26 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,28 @@
 # include "../minilibx_macos/mlx.h"
 # include <math.h>
 
+# define COLOR	0x00FBCF
+# define COLORZ 0xCC00CC
+# define MAX(a, b) (a > b ? a : b)
+# define MOD(a) ((a < 0) ? -a : a)
 # define ESC	53
 
 typedef struct	s_fdf
 {
-	int			width;
-	int			height;
-	int			**matrix;
 	void		*mlx_ptr;
 	void		*win_ptr;
 	void		*img_ptr;
 	char		*img;
+	int			**matrix;
+	int			zoom;
+	int			color;
+	int			colors;
+	int			x;
+	int			y;
+	int			xshift;
+	int			yshift;
+	float			height;
+	float			rotate;
 
 }				t_fdf;
 
