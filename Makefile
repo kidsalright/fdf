@@ -6,7 +6,7 @@
 #    By: yberries <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/20 13:27:22 by yberries          #+#    #+#              #
-#    Updated: 2020/01/31 05:05:16 by yberries         ###   ########.fr        #
+#    Updated: 2020/02/02 06:34:26 by yberries         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,10 @@ INCLUDES = -I$(HDR_DIR) -I$(LIBFT_HDR) -I$(MINILIBX_HDR)
 SOURCES_DIR = ./src/
 SOURCES_LIST = main.c \
 			   read.c \
-			   draw.c \
-			   keys.c
+			   fdf.c \
+			   rotation.c \
+			   keys.c \
+			   draw.c
 SOURCES = $(addprefix $(SOURCES_DIR), $(SOURCES_LIST))
 
 OBJECTS_DIR = objects/

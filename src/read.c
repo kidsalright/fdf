@@ -6,60 +6,75 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 02:48:37 by yberries          #+#    #+#             */
-/*   Updated: 2020/01/31 05:36:17 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/02 06:43:05 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	matrix(int fd, t_fdf *data)
+t_coords		map_coords(int x, int y, int z)
 {
-	char	*line;
-	int		i;
-	char	**nums;
-	int		j;
+	t_coords	map;
 
-	i = 0;
-	data->matrix = (int **)malloc(sizeof(int*) * (data->height + 1));
+	map.x = x;
+	map.y = y;
+	map.z = z;
+	if (map.z > 0)
+		map.col = 1;
+	else
+		map.col = 0;
+	return (map);
+}
+
+void	matrix(int fd, t_fdf *data, t_coords ***stack)
+{
+	t_coords	**map;
+	char		**nums;
+	char		*line;
+	int			x;
+	int			y;
+
+	y = 0;
+	map = (t_coords **)malloc(sizeof(t_coords*) * (data->height));
 	while (get_next_line(fd, &line))
 	{
-		data->matrix[i] = (int *)malloc(sizeof(int) * (data->width + 1));
+		map[y] = (t_coords *)malloc(sizeof(t_coords) * (data->width));
 		nums = ft_strsplit(line, ' ');
-		j = 0;
-		while (nums[j])
+		x = 0;
+		while (nums[x])
 		{
-			data->matrix[i][j] = ft_atoi(nums[j]);
-			free(nums[j]);
-			++j;
+			map[y][x] = map_coords(x, y, ft_atoi(nums[x]));
+			free(nums[x]);
+			++x;
 		}
 		free(nums);
 		free(line);
-		++i;
+		++y;
 	}
 	close(fd);
-	data->matrix[i] = NULL;
+	*stack = map;
 }
 
-void	read_file(char *file, t_fdf *data)
+void	read_file(char *file, t_fdf *data, t_coords ***map)
 {
 	char	*line;
 	int		width;
 	int		fd;
 
 	if (!((fd = open(file, O_RDONLY)) >= 0))
-		ft_error(1);
+		ft_error("can't open file error");
 	data->height = 0;
 	data->width = 0;
 	while (get_next_line(fd, &line))
 	{
 		width = ft_countwords(line, ' ');
 		if (data->width != 0 && data->width != width)
-			ft_error(2);
+			ft_error("invalid line error");
 		data->width = width;
-		data->height++;
+		++data->height;
 	}
 	free(line);
 	close(fd);
 	fd = open(file, O_RDONLY);
-	matrix(fd, data);
+	matrix(fd, data, map);
 }

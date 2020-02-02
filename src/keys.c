@@ -5,91 +5,72 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/29 01:12:32 by yberries          #+#    #+#             */
-/*   Updated: 2020/01/31 05:35:58 by yberries         ###   ########.fr       */
+/*   Created: 2020/02/02 06:30:54 by yberries          #+#    #+#             */
+/*   Updated: 2020/02/02 07:17:02 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int		esc_press(t_fdf *fdf)
+void	key_rot(int keycode, t_fdf *map)
 {
-	free(fdf);
-	mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
-	exit (0);
+	if (keycode == 12)
+		map->rot_y += ANGL;
+	if (keycode == 14)
+		map->rot_y -= ANGL;
+	if (keycode == 13)
+		map->rot_x += ANGL;
+	if (keycode == 1)
+		map->rot_x -= ANGL;
+	if (keycode == 0)
+		map->rot_z += ANGL;
+	if (keycode == 2)
+		map->rot_z -= ANGL;
 }
 
-int		key_press(int keycode, t_fdf *fdf)
+void	key_scale(int keycode, t_fdf *map)
 {
-	if (keycode == 53)
-		esc_press(fdf);
-}
-	/*
-//	if (keycode == 12)
-//	{
-//		if (fdf->zoom < 150)
-//			fdf->zoom++;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
-	if (keycode == 13)
-	{
-//		if (fdf->zoom > 5)
-//			fdf->zoom--;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
-	int i = 0;
-	int j = 0;
-	if (keycode == 14)
-	{
-		fdf->height += 2.1;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
-	if (keycode == 15)
-	{
-//		fdf->colors += 1000;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
-	if (keycode == 17)
-	{
-//		fdf->rotate += 0.2;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
-	if (keycode == 49)
-	{
-//		fdf->zoom = 20;
-//		fdf->height = 0;
-//		fdf->colors = 0;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
 	if (keycode == 123)
-	{
-//		fdf->xshift -= 20;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
+		map->scale_x -= 2;
 	if (keycode == 124)
-	{
-//		fdf->xshift += 20;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
+		map->scale_x += 2;
 	if (keycode == 126)
-	{
-//		fdf->yshift -= 20;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
+		map->scale_y += 2;
 	if (keycode == 125)
-	{
-//		fdf->yshift += 20;
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-//		draw(fdf);
-	}
+		map->scale_y -= 2;
 }
-*/
+
+void	key_reset(t_fdf *map)
+{
+	map->rot_y = 110;
+	map->rot_z = -125;
+	map->rot_x = 245;
+	map->scale_x = DEF_SCALE;
+	map->scale_y = DEF_SCALE;
+}
+
+int			key_hook(int keycode, t_fdf *map)
+{
+	t_fdf mapcpy;
+
+	mapcpy = *map;
+	mapcpy.matrix = coordscopy(map);
+	printf("%d KEY \n", keycode);
+	if (keycode == 53)
+		exit(0);
+	else if (keycode == 15)
+		key_reset(map);
+	else if (keycode >= 0 && keycode <= 14)
+		key_rot(keycode, map);
+	else if (keycode >= 123 && keycode <= 126)
+		key_scale(keycode, map);
+	mlx_clear_window(0, map->win_ptr);
+	scale(&mapcpy, mapcpy.scale_x, mapcpy.scale_y);
+	rotate_x(map->rot_x, &mapcpy);
+	rotate_y(map->rot_y, &mapcpy);
+	rotate_z(map->rot_z, &mapcpy);
+	centermap(&mapcpy);
+	draw_map(mapcpy);
+//	free_map(mapcpy);
+	return (0);
+}
