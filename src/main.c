@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:50:38 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/02 06:45:04 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/03 07:14:35 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		main(int argc, char **argv)
 		ft_error("usage: ./fdf [file.fdf]");
 	read_file(argv[1], &data, &data.matrix);
 	data.mlx_ptr = mlx_init();
-	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "FdF");
+	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "FDF");
 	fdf_init(&data);
 	mlx_hook(data.win_ptr, 2, 0, key_hook, &data);
 	mlx_loop(data.mlx_ptr);

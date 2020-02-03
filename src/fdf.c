@@ -6,38 +6,51 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/02 05:15:26 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/02 06:54:12 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/03 08:24:50 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	centermap(t_fdf *map)
+void		free_data(t_fdf data)
 {
 	int	i;
-	int	j;
-	int	offset_x;
-	int	offset_y;
 
 	i = 0;
-	offset_x = map->matrix[map->height / 2][map->width / 2].x;
-	offset_y = map->matrix[map->height / 2][map->width / 2].z;
-	while (i < map->height)
+	while (i < data.height)
 	{
-		j = 0;
-		while (j < map->width)
-		{
-			map->matrix[i][j].x -= offset_x;
-			map->matrix[i][j].x += WIN_X / 2;
-			map->matrix[i][j].z -= offset_y;
-			map->matrix[i][j].z += WIN_Y / 2;
-			++j;
-		}
+		free(data.matrix[i]);
 		++i;
+	}
+	free(data.matrix);
+}
+
+void		centermap(t_fdf *data)
+{
+	int	offset_x;
+	int	offset_y;
+	int	x;
+	int	y;
+
+	y = 0;
+	offset_x = data->matrix[data->height / 2][data->width / 2].x;
+	offset_y = data->matrix[data->height / 2][data->width / 2].z;
+	while (y < data->height)
+	{
+		x = 0;
+		while (x < data->width)
+		{
+			data->matrix[y][x].x -= offset_x;
+			data->matrix[y][x].x += WIN_X / 2;
+			data->matrix[y][x].z -= offset_y;
+			data->matrix[y][x].z += WIN_Y / 2;
+			++x;
+		}
+		++y;
 	}
 }
 
-void		scale(t_fdf *data, int xs, int ys)
+void		scale(t_fdf *data, int xs, int zs)
 {
 	int	x;
 	int	y;
@@ -50,7 +63,7 @@ void		scale(t_fdf *data, int xs, int ys)
 		{
 			data->matrix[y][x].x *= xs;
 			data->matrix[y][x].y *= xs;
-			data->matrix[y][x].z *= ys;
+			data->matrix[y][x].z *= zs;
 			++x;
 		}
 		++y;
@@ -59,41 +72,42 @@ void		scale(t_fdf *data, int xs, int ys)
 
 t_coords	**coordscopy(t_fdf *data)
 {
-	t_coords	**new;
+	t_coords	**datacpy;
 	int			x;
 	int			y;
 
 	y = 0;
-	new  = (t_coords **)malloc(sizeof(t_coords *) * data->height);
+	datacpy = (t_coords **)malloc(sizeof(t_coords *) * data->height);
 	while (y < data->height)
 	{
-		new[y] = (t_coords *)malloc(sizeof(t_coords) * data->width);
+		datacpy[y] = (t_coords *)malloc(sizeof(t_coords) * data->width);
 		x = 0;
 		while (x < data->width)
 		{
-			new[y][x] = data->matrix[y][x];
+			datacpy[y][x] = data->matrix[y][x];
 			++x;
 		}
 		++y;
 	}
-	return(new);
+	return (datacpy);
 }
 
 void		fdf_init(t_fdf *data)
 {
-	t_fdf	copy;
+	t_fdf	datacpy;
 
-	data->scale_x = DEF_SCALE;
-	data->scale_y = DEF_SCALE;
+	data->scale_x = 25;
+	data->scale_z = 15;
 	data->rot_x = 245;
 	data->rot_y = 110;
 	data->rot_z = -125;
-	copy = *data;
-	copy.matrix = coordscopy(data);
-	scale(&copy, data->scale_x, data->scale_y);
-	rotate_x(data->rot_x, &copy);
-	rotate_y(data->rot_y, &copy);
-	rotate_z(data->rot_z, &copy);
-	centermap(&copy);
-	draw_map(copy);
+	datacpy = *data;
+	datacpy.matrix = coordscopy(data);
+	scale(&datacpy, data->scale_x, data->scale_z);
+	rotate_x(data->rot_x, &datacpy);
+	rotate_y(data->rot_y, &datacpy);
+	rotate_z(data->rot_z, &datacpy);
+	centermap(&datacpy);
+	draw_map(datacpy);
+	free_data(datacpy);
 }

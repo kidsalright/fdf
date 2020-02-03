@@ -6,13 +6,13 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 02:48:37 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/02 06:43:05 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/03 07:32:57 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_coords		map_coords(int x, int y, int z)
+t_coords	map_coords(int x, int y, int z)
 {
 	t_coords	map;
 
@@ -26,7 +26,7 @@ t_coords		map_coords(int x, int y, int z)
 	return (map);
 }
 
-void	matrix(int fd, t_fdf *data, t_coords ***stack)
+void		matrix(int fd, t_fdf *data, t_coords ***stack)
 {
 	t_coords	**map;
 	char		**nums;
@@ -55,21 +55,21 @@ void	matrix(int fd, t_fdf *data, t_coords ***stack)
 	*stack = map;
 }
 
-void	read_file(char *file, t_fdf *data, t_coords ***map)
+void		read_file(char *file, t_fdf *data, t_coords ***map)
 {
 	char	*line;
 	int		width;
 	int		fd;
 
 	if (!((fd = open(file, O_RDONLY)) >= 0))
-		ft_error("can't open file error");
+		ft_error("Error can't open file.");
 	data->height = 0;
 	data->width = 0;
 	while (get_next_line(fd, &line))
 	{
 		width = ft_countwords(line, ' ');
 		if (data->width != 0 && data->width != width)
-			ft_error("invalid line error");
+			ft_error("Error invalid line.");
 		data->width = width;
 		++data->height;
 	}
