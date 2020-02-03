@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 02:48:37 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/03 07:32:57 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/03 08:45:25 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ void		read_file(char *file, t_fdf *data, t_coords ***map)
 			ft_error("Error invalid line.");
 		data->width = width;
 		++data->height;
+		free(line);
 	}
-	free(line);
 	close(fd);
 	fd = open(file, O_RDONLY);
 	matrix(fd, data, map);

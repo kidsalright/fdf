@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:50:38 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/03 07:14:35 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/03 08:46:18 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ int		main(int argc, char **argv)
 	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "FDF");
 	fdf_init(&data);
 	mlx_hook(data.win_ptr, 2, 0, key_hook, &data);
+	mlx_hook(data.win_ptr, 17, 0, key_hook, &data);
 	mlx_loop(data.mlx_ptr);
 }
