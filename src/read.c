@@ -6,44 +6,44 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 02:48:37 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/03 08:45:25 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/04 21:18:30 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_coords	map_coords(int x, int y, int z)
+t_coords	matrix_coords(int x, int y, int z)
 {
-	t_coords	map;
+	t_coords	matrix;
 
-	map.x = x;
-	map.y = y;
-	map.z = z;
-	if (map.z > 0)
-		map.col = 1;
+	matrix.x = x;
+	matrix.y = y;
+	matrix.z = z;
+	if (matrix.z != 0)
+		matrix.col = 1;
 	else
-		map.col = 0;
-	return (map);
+		matrix.col = 0;
+	return (matrix);
 }
 
-void		matrix(int fd, t_fdf *data, t_coords ***stack)
+void		matrix_get(int fd, t_fdf *data, t_coords ***stack)
 {
-	t_coords	**map;
+	t_coords	**matrix;
 	char		**nums;
 	char		*line;
 	int			x;
 	int			y;
 
 	y = 0;
-	map = (t_coords **)malloc(sizeof(t_coords*) * (data->height));
+	matrix = (t_coords **)malloc(sizeof(t_coords*) * (data->height));
 	while (get_next_line(fd, &line))
 	{
-		map[y] = (t_coords *)malloc(sizeof(t_coords) * (data->width));
+		matrix[y] = (t_coords *)malloc(sizeof(t_coords) * (data->width));
 		nums = ft_strsplit(line, ' ');
 		x = 0;
 		while (nums[x])
 		{
-			map[y][x] = map_coords(x, y, ft_atoi(nums[x]));
+			matrix[y][x] = matrix_coords(x, y, ft_atoi(nums[x]));
 			free(nums[x]);
 			++x;
 		}
@@ -52,10 +52,10 @@ void		matrix(int fd, t_fdf *data, t_coords ***stack)
 		++y;
 	}
 	close(fd);
-	*stack = map;
+	*stack = matrix;
 }
 
-void		read_file(char *file, t_fdf *data, t_coords ***map)
+void		read_file(char *file, t_fdf *data, t_coords ***matrix)
 {
 	char	*line;
 	int		width;
@@ -76,5 +76,5 @@ void		read_file(char *file, t_fdf *data, t_coords ***map)
 	}
 	close(fd);
 	fd = open(file, O_RDONLY);
-	matrix(fd, data, map);
+	matrix_get(fd, data, matrix);
 }
