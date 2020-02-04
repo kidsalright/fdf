@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 02:48:37 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/04 23:09:21 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/04 23:24:44 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,20 @@ void		matrix_get(int fd, t_fdf *data, t_coords ***stack)
 	int			x;
 	int			y;
 
-	y = 0;
+	y = -1;
 	matrix = (t_coords **)malloc(sizeof(t_coords*) * (data->height));
 	while (get_next_line(fd, &line))
 	{
-		matrix[y] = (t_coords *)malloc(sizeof(t_coords) * (data->width));
+		matrix[++y] = (t_coords *)malloc(sizeof(t_coords) * (data->width));
 		nums = ft_strsplit(line, ' ');
-		x = 0;
-		while (nums[x])
+		x = -1;
+		while (nums[++x])
 		{
 			matrix[y][x] = matrix_coords(x, y, ft_atoi(nums[x]));
 			free(nums[x]);
-			++x;
 		}
 		free(nums);
 		free(line);
-		++y;
 	}
 	close(fd);
 	*stack = matrix;

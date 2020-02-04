@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/02 05:15:26 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/04 22:52:34 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/04 23:25:46 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,9 @@ void		free_data(t_fdf data)
 {
 	int	i;
 
-	i = 0;
-	while (i < data.height)
-	{
+	i = -1;
+	while (++i < data.height)
 		free(data.matrix[i]);
-		++i;
-	}
 	free(data.matrix);
 }
 

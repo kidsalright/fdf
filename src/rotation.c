@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/02 05:35:16 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/04 23:17:17 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/04 23:28:33 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void	rotate_x(float angle, t_fdf *data)
 	int		y;
 
 	angle *= 0.01745329252;
-	y = 0;
-	while (y < data->height)
+	y = -1;
+	while (++y < data->height)
 	{
-		x = 0;
-		while (x < data->width)
+		x = -1;
+		while (++x < data->width)
 		{
 			z1 = data->matrix[y][x].z * cos(angle) - \
 									data->matrix[y][x].y * sin(angle);
@@ -32,9 +32,7 @@ void	rotate_x(float angle, t_fdf *data)
 									data->matrix[y][x].z * sin(angle);
 			data->matrix[y][x].y = y1;
 			data->matrix[y][x].z = z1;
-			++x;
 		}
-		++y;
 	}
 }
 
@@ -45,12 +43,12 @@ void	rotate_y(float angle, t_fdf *data)
 	int		y;
 	int		x;
 
-	y = 0;
+	y = -1;
 	angle = angle * 0.01745329252;
-	while (y < data->height)
+	while (++y < data->height)
 	{
-		x = 0;
-		while (x < data->width)
+		x = -1;
+		while (++x < data->width)
 		{
 			x1 = data->matrix[y][x].y * cos(angle) - \
 									data->matrix[y][x].x * sin(angle);
@@ -58,9 +56,7 @@ void	rotate_y(float angle, t_fdf *data)
 									data->matrix[y][x].x * cos(angle);
 			data->matrix[y][x].x = x1;
 			data->matrix[y][x].y = y1;
-			++x;
 		}
-		++y;
 	}
 }
 
@@ -71,12 +67,12 @@ void	rotate_z(float angle, t_fdf *data)
 	int		x;
 	int		y;
 
-	y = 0;
+	y = -1;
 	angle = angle * 0.01745329252;
-	while (y < data->height)
+	while (++y < data->height)
 	{
-		x = 0;
-		while (x < data->width)
+		x = -1;
+		while (++x < data->width)
 		{
 			x1 = data->matrix[y][x].z * cos(angle) + \
 									data->matrix[y][x].x * sin(angle);
@@ -84,8 +80,6 @@ void	rotate_z(float angle, t_fdf *data)
 									data->matrix[y][x].z * sin(angle);
 			data->matrix[y][x].x = x1;
 			data->matrix[y][x].z = z1;
-			++x;
 		}
-		++y;
 	}
 }
