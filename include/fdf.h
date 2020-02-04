@@ -6,7 +6,7 @@
 /*   By: yberries <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:40:07 by yberries          #+#    #+#             */
-/*   Updated: 2020/02/04 23:00:26 by yberries         ###   ########.fr       */
+/*   Updated: 2020/02/04 23:20:39 by yberries         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void			matrix_get(int fd, t_fdf *data, t_coords ***stack);
 t_coords		matrix_coords(int x, int y, int z);
 void			fdf_init(t_fdf *data);
 t_coords		**coordscopy(t_fdf *data);
-void			scale(t_fdf *data, int xs, int ys);
+void			scale(t_fdf *data, int xs, int zs);
 void			rotate_x(float angle, t_fdf *data);
 void			rotate_y(float angle, t_fdf *data);
 void			rotate_z(float angle, t_fdf *data);
@@ -68,6 +68,6 @@ void			some_key(int keycode, t_fdf *data);
 void			rot_key(int keycode, t_fdf *data);
 void			res_key(t_fdf *data);
 void			key_pressed(t_fdf *data);
-int				red_key(void *data);
+int				ft_close(void *data);
 
 #endif
